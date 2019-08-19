@@ -18,7 +18,7 @@ describe('[auth.controller.js]', () => {
     const token = jwt.sign(
       { email: user.email, },
       'secret13',
-      { expiresIn: 30 },
+      { expiresIn: 60 * 60 },
     );
 
     expect(result).toEqual({

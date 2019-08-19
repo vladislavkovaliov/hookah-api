@@ -24,8 +24,6 @@ module.exports = ((config, UserModel) => {
           };
         }
 
-
-
         const user = await UserModel.findOne({
           email,
           password,
@@ -34,10 +32,18 @@ module.exports = ((config, UserModel) => {
         const token = jwt.sign(
           { email, },
           'secret13',
-          { expiresIn: 30 },
+          { expiresIn: 60 * 60 },
         );
 
-        if (Array.from(user.tokens).includes(token)) {
+        const isAlreadyLogin = ~Array
+          .from(user.tokens)
+          .findIndex(async (token) => {
+            const decoded = await jwt.verify(token, 'secret13');
+
+            return user.email === decoded.email;
+          });
+
+        if (isAlreadyLogin) {
           return {
             message: 'User already is login'
           };
