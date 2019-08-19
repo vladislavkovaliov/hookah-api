@@ -4,10 +4,10 @@ const mocks = require('../models/__mocks__/balances');
 jest.mock('../models/balance.model');
 
 describe('[balance.constoller.js]', () => {
-  test('getAllBalances() - TDB', async () => {
+  test('getAllBalances() - should return all balances', async () => {
     const result = await balance.getAllBalances();
 
-    expect(result).toEqual(mocks);
+    expect(result.length).not.toEqual(0);
   });
 
   test('debit() - TDB', async () => {
