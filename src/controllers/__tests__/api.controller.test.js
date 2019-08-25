@@ -1,6 +1,6 @@
-const api = require('./api.controller');
+const api = require('../api.controller');
 
-jest.mock('../config', () => ({
+jest.mock('../../config', () => ({
   port: '.|.',
 }));
 

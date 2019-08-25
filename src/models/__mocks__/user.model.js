@@ -11,7 +11,7 @@ const UserModel = {
     return Promise.resolve(user);
   }),
   exists: jest.fn().mockImplementation((user) => {
-    return Promise.resolve(~users.findIndex(u => u.email === user.email && u.password === user.password ));
+    return Promise.resolve(!!~users.findIndex(u => u.email === user.email && u.password === user.password ));
   }),
   findOneAndUpdate: jest.fn().mockImplementation((filter, newUser) => {
     let user = null;

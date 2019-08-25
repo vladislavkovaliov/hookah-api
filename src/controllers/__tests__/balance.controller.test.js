@@ -1,7 +1,6 @@
-const balance = require('./balance.controller');
-const mocks = require('../models/__mocks__/balances');
+const balance = require('../balance.controller');
 
-jest.mock('../models/balance.model');
+jest.mock('../../models/balance.model');
 
 describe('[balance.constoller.js]', () => {
   test('getAllBalances() - should return all balances', async () => {

@@ -1,11 +1,10 @@
-const auth = require('./auth.controller');
+const auth = require('../auth.controller');
 const jwt = require('jsonwebtoken');
 
-jest.mock('../config', () => ({
+jest.mock('../../config', () => ({
   port: '.|.',
 }));
-jest.mock('../models/user.model');
-
+jest.mock('../../models/user.model');
 
 describe('[auth.controller.js]', () => {
   test('login() - should return token', async () => {

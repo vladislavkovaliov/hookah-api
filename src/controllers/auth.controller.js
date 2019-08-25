@@ -66,7 +66,6 @@ module.exports = ((config, UserModel) => {
       }
     },
 
-
     logout: async (token) => {
       const query = { tokens: { $in: [token] } };
       const oldUser = await UserModel.findOne(query);

@@ -1,7 +1,7 @@
-const user = require('./user.controller');
-const mocks = require('../models/__mocks__/users');
+const user = require('../user.controller');
+const mocks = require('../../models/__mocks__/users');
 
-jest.mock('../models/user.model');
+jest.mock('../../models/user.model');
 
 describe('[user.constoller.js]', () => {
   test('getAllUsers() - should not be empty', async () => {
