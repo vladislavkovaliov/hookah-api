@@ -15,16 +15,9 @@ describe('[auth.controller.js]', () => {
     };
     await auth.register(newUser);
     const result = await auth.login(newUser);
-    const token = jwt.sign(
-      { email: newUser.email, },
-      'secret13',
-      { expiresIn: 60 * 60 },
-    );
 
-    expect(result).toEqual({
-      token,
-    });
-    user.removeUser(newUser);
+    expect(result).toHaveProperty('token');
+    await user.removeUser(newUser);
   });
 
   test('register() - should create and return user that is created', async () => {
@@ -34,14 +27,9 @@ describe('[auth.controller.js]', () => {
     };
     const result = await auth.register(newUser);
 
-    expect(result).toEqual({
-      status: 201,
-      user: {
-        email: newUser.email,
-      },
-    });
+    expect(result.user.email).toEqual(newUser.email);
 
-    user.removeUser(newUser);
+    await user.removeUser(newUser);
   });
 
   test.skip('logout() - should remove token from user property tokens', async () => {

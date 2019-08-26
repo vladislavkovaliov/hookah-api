@@ -44,9 +44,13 @@ module.exports = ((config, UserModel) => {
           });
 
         if (isAlreadyLogin) {
-          return {
-            message: 'User already is login'
-          };
+          await UserModel.findOneAndUpdate(
+            {
+              email,
+              password,
+            },
+            { tokens: [] },
+          );
         }
 
         await UserModel.findOneAndUpdate(
