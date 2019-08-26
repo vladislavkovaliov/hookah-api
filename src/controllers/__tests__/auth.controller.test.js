@@ -6,6 +6,10 @@ const user = require('../user.controller');
 // }));
 // jest.mock('../../models/user.model');
 
+it('', () => {
+
+});
+
 describe('[auth.controller.js]', () => {
   test('login() - should return token', async () => {
     const newUser = {

@@ -30,7 +30,10 @@ module.exports = ((config, UserModel) => {
         });
 
         const token = jwt.sign(
-          { email, },
+          {
+            _id: user._id,
+            email,
+          },
           'secret13',
           { expiresIn: 60 * 60 },
         );

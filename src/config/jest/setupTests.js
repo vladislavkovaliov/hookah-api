@@ -13,10 +13,6 @@ beforeEach(function(done) {
   if (mongoose.connection.readyState === 0) {
     mongoose
       .connect(config.MONGODB_URI, {
-        server: {
-          reconnectTries: Number.MAX_VALUE,
-          reconnectInterval: 1000
-        },
         useNewUrlParser: true
       } )
       .then(() => { /** ready to use. The `mongoose.connect()` promise resolves to undefined. */ })

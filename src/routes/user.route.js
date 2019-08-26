@@ -14,5 +14,17 @@ module.exports = ((config, user) => {
     });
   });
 
+  route.get('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    const response = await user.getUserById({
+      id,
+    });
+
+    res.json({
+      ...response,
+    });
+  });
+
   return route;
 })(config, User);
