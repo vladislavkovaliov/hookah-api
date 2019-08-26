@@ -160,9 +160,30 @@ paths:
   /api/auth/register:
     post:
       tags:
-      - "auth"
+        - "auth"
       summary: ""
       description: ""
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The user that needs to login"
+          required: true
+          type: "string"
+          schema:
+            $ref: "#/definitions/UserRegister"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Invalid status value"
   /api/auth/logout:
     delete:
       tags:
@@ -238,3 +259,11 @@ definitions:
         enum:
         - "jwt"
         - "TBD"
+  UserRegister:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "TBD"
+      password:
+        type: "string"

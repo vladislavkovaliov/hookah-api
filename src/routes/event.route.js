@@ -5,7 +5,7 @@ const Event = require('../controllers/events.controller');
 
 module.exports = ((config, event) => {
   const route = express.Router();
-  event.isEventExists({});
+
   route.post('/', async (req, res) => {
     const {
       name,

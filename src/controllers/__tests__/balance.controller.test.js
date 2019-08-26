@@ -1,6 +1,6 @@
 const balance = require('../balance.controller');
 
-jest.mock('../../models/balance.model');
+// jest.mock('../../models/balance.model');
 
 describe('[balance.constoller.js]', () => {
   test('getAllBalances() - should return all balances', async () => {
@@ -9,7 +9,7 @@ describe('[balance.constoller.js]', () => {
     expect(result.length).not.toEqual(0);
   });
 
-  test('debit() - TDB', async () => {
+  test.skip('debit() - TDB', async () => {
     const result = await balance.debit({
       balanceId: 1,
       action: 'debit',
@@ -19,7 +19,7 @@ describe('[balance.constoller.js]', () => {
     expect(result).toEqual(true);
   });
 
-  test('credit() - TDB', async () => {
+  test.skip('credit() - TDB', async () => {
     const result = await balance.credit({
       balanceId: 1,
       action: 'credit',

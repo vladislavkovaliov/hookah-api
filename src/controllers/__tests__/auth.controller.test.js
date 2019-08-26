@@ -1,21 +1,22 @@
 const auth = require('../auth.controller');
 const jwt = require('jsonwebtoken');
-
-jest.mock('../../config', () => ({
-  port: '.|.',
-}));
-jest.mock('../../models/user.model');
+const user = require('../user.controller');
+// jest.mock('../../config', () => ({
+//   port: '.|.',
+// }));
+// jest.mock('../../models/user.model');
 
 describe('[auth.controller.js]', () => {
   test('login() - should return token', async () => {
-    const user = {
-      email: 'rick@gmail.com',
+    const newUser = {
+      email: 'rick_login@gmail.com',
       password: 'rick',
       strategy: 'jwt',
     };
-    const result = await auth.login(user);
+    await auth.register(newUser);
+    const result = await auth.login(newUser);
     const token = jwt.sign(
-      { email: user.email, },
+      { email: newUser.email, },
       'secret13',
       { expiresIn: 60 * 60 },
     );
@@ -23,6 +24,7 @@ describe('[auth.controller.js]', () => {
     expect(result).toEqual({
       token,
     });
+    user.removeUser(newUser);
   });
 
   test('register() - should create and return user that is created', async () => {
@@ -38,9 +40,11 @@ describe('[auth.controller.js]', () => {
         email: newUser.email,
       },
     });
+
+    user.removeUser(newUser);
   });
 
-  test('logout() - should remove token from user property tokens', async () => {
+  test.skip('logout() - should remove token from user property tokens', async () => {
     const user = {
       email: 'rick@gmail.com',
       password: 'rick',
