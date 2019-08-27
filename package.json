@@ -29,15 +29,15 @@
     "ramda": "0.26.1",
     "sequelize": "^5.16.0",
     "shelljs": "^0.8.3",
-    "yamljs": "0.3.0"
+    "yamljs": "0.3.0",
+    "swagger-ui-express": "4.0.7"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.1.0",
     "eslint": "6.2.0",
     "eslint-cli": "1.1.1",
     "jest": "24.9.0",
-    "sinon": "^7.4.1",
-    "swagger-ui-express": "4.0.7"
+    "sinon": "^7.4.1"
   },
   "jest": {
     "setupFilesAfterEnv": [
