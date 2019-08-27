@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
-  email: { type: String, unique: true },
+  email: { type: String, unique: true, expires: 60 },
   password: String,
   passwordResetToken: String,
   passwordResetExpires: Date,
@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
     location: String,
     website: String,
     picture: String
-  }
+  },
+
 }, { timestamps: true });
 
 /**

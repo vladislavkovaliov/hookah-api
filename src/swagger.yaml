@@ -41,6 +41,116 @@ paths:
               $ref: "#/definitions/User"
         400:
           description: "Invalid status value"
+    post:
+      tags:
+        - "users"
+      summary: "Create a new user"
+      description: ""
+      operationId: "createUser"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "The user that needs to create"
+        required: true
+        type: "string"
+        schema:
+          $ref: "#/definitions/UserCreate"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        400:
+          description: "Invalid status value"
+  /api/users/{id}:
+    get:
+      tags:
+        - "users"
+      summary: "Return user by id"
+      description: ""
+      operationId: "getUserById"
+      parameters:
+      - name: hookah-jwt
+        in: header
+        description: an authorization header
+        type: string
+      - name: "id"
+        in: "path"
+        description: "The user id that needs to be found"
+        required: true
+        type: "string"
+      responses:
+        200:
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Invalid status value"
+    put:
+      tags:
+        - "users"
+      summary: "Update a new user"
+      description: ""
+      operationId: "updateUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The user id that needs to be removed"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "The user that needs to update"
+        required: true
+        type: "string"
+        schema:
+          $ref: "#/definitions/UserPut"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/User"
+        400:
+          description: "Invalid status value"
+    delete:
+      tags:
+        - "users"
+      summary: "Remove user by id"
+      description: ""
+      operationId: "removeUser"
+      parameters:
+      - name: hookah-jwt
+        in: header
+        description: an authorization header
+        type: string
+      - name: "id"
+        in: "path"
+        description: "The user id that needs to be removed"
+        required: true
+        type: "string"
+      responses:
+        200:
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Invalid status value"
   /api/ping:
     get:
       tags:
@@ -259,6 +369,22 @@ definitions:
         enum:
         - "jwt"
         - "TBD"
+  UserPut:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "TBD"
+      password:
+        type: "string"
+  UserCreate:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "TBD"
+      password:
+        type: "string"
   UserRegister:
     type: "object"
     properties:
