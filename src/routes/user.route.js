@@ -10,7 +10,7 @@ module.exports = ((config, user) => {
     const response = await user.getAllUsers();
 
     res.json({
-      ...response,
+      data: response,
     });
   });
 
