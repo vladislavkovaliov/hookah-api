@@ -5,7 +5,9 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
-const swaggerDocument = YAML.load('./src/swagger.yaml');
+const swaggerDocument = process.env.NODE_ENV === 'production'
+  ? YAML.load('./src/swagger.production.yaml')
+  : YAML.load('./src/swagger.yaml');
 mongoose.Promise = Promise;
 const config = require('./config');
 

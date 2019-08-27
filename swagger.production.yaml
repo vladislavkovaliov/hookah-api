@@ -1,0 +1,395 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters."
+  version: "1.0.0"
+  title: "Hookah App"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "hookah-api.herokuapp.com"
+basePath: "/"
+tags:
+  - name: "users"
+    description: "Operations about user"
+    externalDocs:
+      description: "Find out more about our store"
+      url: "http://swagger.io"
+schemes:
+  - "https"
+  - "http"
+paths:
+  /api/users:
+    get:
+      tags:
+      - "users"
+      summary: "Get all users"
+      description: ""
+      operationId: "getAllUsers"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        400:
+          description: "Invalid status value"
+    post:
+      tags:
+        - "users"
+      summary: "Create a new user"
+      description: ""
+      operationId: "createUser"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "The user that needs to create"
+        required: true
+        type: "string"
+        schema:
+          $ref: "#/definitions/UserCreate"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        400:
+          description: "Invalid status value"
+  /api/users/{id}:
+    get:
+      tags:
+        - "users"
+      summary: "Return user by id"
+      description: ""
+      operationId: "getUserById"
+      parameters:
+      - name: hookah-jwt
+        in: header
+        description: an authorization header
+        type: string
+      - name: "id"
+        in: "path"
+        description: "The user id that needs to be found"
+        required: true
+        type: "string"
+      responses:
+        200:
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Invalid status value"
+    put:
+      tags:
+        - "users"
+      summary: "Update a new user"
+      description: ""
+      operationId: "updateUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The user id that needs to be removed"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "The user that needs to update"
+        required: true
+        type: "string"
+        schema:
+          $ref: "#/definitions/UserPut"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/User"
+        400:
+          description: "Invalid status value"
+    delete:
+      tags:
+        - "users"
+      summary: "Remove user by id"
+      description: ""
+      operationId: "removeUser"
+      parameters:
+      - name: hookah-jwt
+        in: header
+        description: an authorization header
+        type: string
+      - name: "id"
+        in: "path"
+        description: "The user id that needs to be removed"
+        required: true
+        type: "string"
+      responses:
+        200:
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Invalid status value"
+  /api/ping:
+    get:
+      tags:
+      - "api"
+      summary: ""
+      description: ""
+      operationId: "getPing"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Ping"
+        400:
+          description: "Invalid status value"
+  /api/config:
+    get:
+      tags:
+      - "api"
+      summary: ""
+      description: ""
+      operationId: "getConfig"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+        400:
+          description: "Invalid status value"
+  /api/balances:
+    get:
+      tags:
+      - "balances"
+      summary: ""
+      description: ""
+      operationId: "getAllBalances"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Balance"
+        400:
+          description: "Invalid status value"
+  /api/balances/{balanceId}:
+    patch:
+      tags:
+      - "balances"
+      summary: ""
+      description: ""
+      operationId: "get(debit|credit)"
+      parameters:
+      - name: "balanceId"
+        in: "path"
+        description: "The balance id that needs to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "The balance id that needs to be updated"
+        required: true
+        type: "string"
+        schema:
+          $ref: "#/definitions/BalanceAction"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Balance"
+        400:
+          description: "Invalid status value"
+  /api/auth/login:
+    post:
+      tags:
+      - "auth"
+      summary: ""
+      description: ""
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "The user that needs to login"
+        required: true
+        type: "string"
+        schema:
+          $ref: "#/definitions/UserLogin"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Invalid status value"
+  /api/auth/register:
+    post:
+      tags:
+        - "auth"
+      summary: ""
+      description: ""
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The user that needs to login"
+          required: true
+          type: "string"
+          schema:
+            $ref: "#/definitions/UserRegister"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Invalid status value"
+  /api/auth/logout:
+    delete:
+      tags:
+      - "auth"
+      summary: ""
+      description: ""
+      parameters:
+      - name: hookah-jwt
+        in: header
+        description: an authorization header
+        required: true
+        type: string
+      responses:
+        200:
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Invalid status value"
+definitions:
+  User:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      email:
+        type: "string"
+      createdAt:
+        type: "string"
+    json:
+      name: "User"
+  Ping:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+  Balance:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "TBD"
+      amount:
+        type: "number"
+      message:
+        type: "string"
+      createdAt:
+        type: "string"
+  BalanceAction:
+    type: "object"
+    properties:
+      action:
+        type: "string"
+        description: "TBD"
+        enum:
+        - "debit"
+        - "credit"
+      amount:
+        type: "number"
+  UserLogin:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "TBD"
+      password:
+        type: "string"
+      strategy:
+        type: "string"
+        description: "TBD"
+        enum:
+        - "jwt"
+        - "TBD"
+  UserPut:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "TBD"
+      password:
+        type: "string"
+  UserCreate:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "TBD"
+      password:
+        type: "string"
+  UserRegister:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "TBD"
+      password:
+        type: "string"
