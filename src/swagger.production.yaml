@@ -21,6 +21,32 @@ schemes:
   - "https"
   - "http"
 paths:
+  /api/users/me:
+    get:
+      tags:
+        - "users"
+      summary: "Get user information"
+      description: ""
+      operationId: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: hookah-jwt
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        400:
+          description: "Invalid status value"
   /api/users:
     get:
       tags:
@@ -32,6 +58,11 @@ paths:
       - "application/json"
       produces:
       - "application/json"
+      parameters:
+      - name: hookah-jwt
+        in: header
+        description: an authorization header
+        type: string
       responses:
         200:
           description: "successful operation"

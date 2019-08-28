@@ -3,8 +3,14 @@ const config = require('../config');
 
 const User = require('../controllers/user.controller');
 
+const middleware = require('../middlewares');
+
 module.exports = ((config, user) => {
   const route = express.Router();
+
+  route.get('/me', middleware.auth, async (req, res) => {
+    res.json(req.user);
+  });
 
   route.get('/', async (req, res) => {
     const response = await user.getAllUsers();
@@ -25,7 +31,7 @@ module.exports = ((config, user) => {
       next(response);
     }
 
-    res.json({
+    res.status(201).json({
       ...response,
     });
   });

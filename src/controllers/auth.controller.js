@@ -1,8 +1,9 @@
 const config = require('../config');
 const UserModel = require('../models/user.model');
+const SessionModel = require('../models/session.model');
 const jwt = require('jsonwebtoken');
 
-module.exports = ((config, UserModel) => {
+module.exports = ((config, UserModel, SessionModel) => {
   return {
     /**
      *
@@ -13,22 +14,7 @@ module.exports = ((config, UserModel) => {
       const { email, password } = user;
 
       try {
-        const isExists = await UserModel.exists({
-          email,
-          password,
-        });
-
-        if (!isExists) {
-          return {
-            message: 'User is not in db.'
-          };
-        }
-
-        const user = await UserModel.findOne({
-          email,
-          password,
-        });
-
+        const user = await UserModel.findByCredentials(email, password);
         const token = jwt.sign(
           {
             _id: user._id,
@@ -38,31 +24,16 @@ module.exports = ((config, UserModel) => {
           { expiresIn: 60 * 60 },
         );
 
-        const isAlreadyLogin = ~Array
-          .from(user.tokens)
-          .findIndex(async (token) => {
-            const decoded = await jwt.verify(token, 'secret13');
-
-            return user.email === decoded.email;
-          });
-
-        if (isAlreadyLogin) {
+        Promise.all([
+          await SessionModel.create({
+            userId: user._id,
+            token,
+          }),
           await UserModel.findOneAndUpdate(
-            {
-              email,
-              password,
-            },
-            { tokens: [] },
-          );
-        }
-
-        await UserModel.findOneAndUpdate(
-          {
-            email,
-            password,
-          },
-          { tokens: [...user.tokens, token] },
-        );
+            { email, password, },
+            { tokens: [...user.tokens, token] }, // TODO: use $push
+          ),
+        ]);
 
         return {
           token,
@@ -70,26 +41,28 @@ module.exports = ((config, UserModel) => {
       }
       catch (e) {
         console.trace(e);
+        return e;
       }
     },
 
     logout: async (token) => {
-      const query = { tokens: { $in: [token] } };
-      const oldUser = await UserModel.findOne(query);
+      const filter = { tokens: { $in: [token] } };
+      const oldUser = await UserModel.findOne(filter);
 
       if (!oldUser) {
         return {};
       }
 
+      // TODO: remove after middleware will be implemented
       await UserModel.findOneAndUpdate(
-        query,
+        filter,
         {
           tokens: oldUser.tokens.filter(t => t !== token),
         },
       );
 
       return {
-        message: 'User did logout'
+        message: '.|.'
       }
     },
     /**
@@ -98,6 +71,7 @@ module.exports = ((config, UserModel) => {
      */
     register: async (user) => {
       const { email, password } = user;
+      // TODO: re-code to static method at model ?and use next()?
       const isAlreadyExists = await UserModel.exists({
         email,
       });
@@ -134,7 +108,7 @@ module.exports = ((config, UserModel) => {
       };
     },
   };
-})(config, UserModel);
+})(config, UserModel, SessionModel);
 
 /**
  * @typedef {Object} User

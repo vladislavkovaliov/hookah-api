@@ -14,7 +14,7 @@ const config = require('./config');
 const app = express();
 
 mongoose
-  .connect(config.MONGODB_URI, { useNewUrlParser: true} )
+  .connect(config.MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false } )
   .then(() => { /** ready to use. The `mongoose.connect()` promise resolves to undefined. */ })
   .catch(err => {
     console.log("MongoDB connection error. Please make sure MongoDB is running. " + err);
@@ -39,9 +39,7 @@ app.use('/api/auth', require('./routes/auth.route'));
 app.use('/api/events', require('./routes/event.route'));
 
 app.use((err, req, res, next) => {
-  res
-    .status(err.code)
-    .json({
+  res.json({
       ...err,
     });
 });
@@ -51,4 +49,3 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.listen(process.env.PORT || config.port, () => {
   console.log('start on', config.port);
 });
-

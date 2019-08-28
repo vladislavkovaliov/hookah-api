@@ -2,20 +2,26 @@ const express = require('express');
 const config = require('../config');
 
 const Auth = require('../controllers/auth.controller');
+const middleware = require('../middlewares');
 
 module.exports = ((config, auth) => {
   const route = express.Router();
 
-  route.post('/login', async (req, res) => {
+  route.post('/login', async (req, res, next) => {
     const { email, password, strategy = 'jwt' } = req.body;
     const response = await auth.login({
       email,
       password,
     });
 
-    res.header('hookah-jwt', response.token);
+    console.log(response instanceof Error);
+    if (response instanceof Error) {
+      next(response);
+      return;
+    }
 
-    res.status(200).json({
+    // res.;
+    res.header('hookah-jwt', response.token).status(200).json({
       ...response,
     });
   });

@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+const { InvalidLoginCredentialsError } = require('../errors');
 
 const userSchema = new mongoose.Schema({
-  email: { type: String, unique: true, expires: 60 },
+  email: { type: String, unique: true, expires: '30s', default: Date.now },
   password: String,
   passwordResetToken: String,
   passwordResetExpires: Date,
@@ -20,8 +22,8 @@ const userSchema = new mongoose.Schema({
     website: String,
     picture: String
   },
-
 }, { timestamps: true });
+// userSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60000 / 60 });
 
 /**
  * Password hash middleware.
@@ -43,6 +45,36 @@ const userSchema = new mongoose.Schema({
 //   });
 // });
 
+userSchema.methods.generateAuthToken = async function() {
+  // Generate an auth token for the user
+  const user = this;
+  const token = jwt.sign(
+    { _id: user._id },
+    'secret13',
+  );
+
+  user.tokens = user.tokens.concat(token);
+
+  await user.save();
+
+  return token;
+};
+
+userSchema.statics.findByCredentials = async (email, password) => {
+  // Search for a user by email and password.
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new InvalidLoginCredentialsError();
+  }
+
+  const isPasswordMatch = password === user.password;
+  if (!isPasswordMatch) {
+    throw new InvalidLoginCredentialsError();
+  }
+
+  return user;
+};
+
 /**
  * Helper method for getting user's gravatar.
  */
@@ -54,4 +86,6 @@ userSchema.methods.gravatar = function (size = 200) {
   return `https://gravatar.com/avatar/${md5}?s=${size}&d=retro`;
 };
 
-module.exports = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;
