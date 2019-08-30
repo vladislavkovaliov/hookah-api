@@ -8,12 +8,26 @@ module.exports = ((config, UserModel) => {
   return {
     getAllUsers: async () => {
       try {
-        const users = await UserModel.find();
+        const users = await UserModel
+          .find()
+          .populate('balance');
+
+        // const users = await UserModel.aggregate([
+        //   {
+        //     $lookup: {
+        //       from: 'balances',
+        //       localField: "_id",
+        //       foreignField: "userId",
+        //       as: "inventory_docs"
+        //     },
+        //   },
+        // ]);
 
         return users.map(u => ({
           _id: u._id,
           email: u.email,
-          createdAt: u.createdAt,
+          name: u.name,
+          balance: u.balance,
         }));
       } catch (e) {
         console.trace(e);
@@ -22,9 +36,14 @@ module.exports = ((config, UserModel) => {
 
     createUser: async (user) => {
       try {
+        const { email, password, name = '' } = user;
         const isUserExists = await existsByFilter(
           UserModel,
-          {email: user.email,},
+          {
+            email,
+            password,
+            name,
+          },
         );
 
         if (isUserExists) {

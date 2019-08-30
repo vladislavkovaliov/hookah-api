@@ -8,6 +8,24 @@ module.exports = ((config, BalanceModel) => {
 
       return balances;
     },
+
+    createBalance: async (balance) => {
+      const { userId, amount, message } = balance;
+
+      try {
+        const b = await BalanceModel.create({
+          userId,
+          amount,
+          message,
+        });
+
+
+        return b;
+      } catch (e) {
+        console.trace(e);
+      }
+    },
+
     /**
      * @param {Options} opts
      * @returns {Balance}

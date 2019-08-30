@@ -5,8 +5,14 @@ const jwt = require('jsonwebtoken');
 const { InvalidLoginCredentialsError } = require('../errors');
 
 const userSchema = new mongoose.Schema({
-  email: { type: String, unique: true, expires: '30s', default: Date.now },
-  password: String,
+  email: { type: String, unique: true },
+  name: { type: String, default: 'No name' },
+  password: { type: String, },
+  balance: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: null,
+    ref: 'Balance',
+  },
   passwordResetToken: String,
   passwordResetExpires: Date,
 

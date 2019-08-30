@@ -14,6 +14,20 @@ module.exports = ((config, balance) => {
     });
   });
 
+  route.post('/', async (req, res) => {
+    const { userId, amount, message } = req.body;
+
+    const response = await balance.createBalance({
+      userId,
+      amount,
+      message,
+    });
+
+    res.status(201).json({
+      ...response,
+    });
+  });
+
   route.patch('/:balanceId', async (req, res) => {
     const { balanceId } = req.params;
     const { action, amount } = req.body;

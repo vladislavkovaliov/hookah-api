@@ -24,13 +24,15 @@
     "lodash": "4.17.15",
     "mocha": "^6.2.0",
     "mongoose": "5.6.9",
+    "mongoose-validator": "^2.1.0",
     "morgan": "1.9.1",
     "nodemon": "1.19.1",
     "ramda": "0.26.1",
     "sequelize": "^5.16.0",
     "shelljs": "^0.8.3",
-    "yamljs": "0.3.0",
-    "swagger-ui-express": "4.0.7"
+    "swagger-ui-express": "4.0.7",
+    "validator": "^11.1.0",
+    "yamljs": "0.3.0"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.1.0",

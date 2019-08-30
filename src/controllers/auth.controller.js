@@ -70,7 +70,7 @@ module.exports = ((config, UserModel, SessionModel) => {
      * @returns {Object}
      */
     register: async (user) => {
-      const { email, password } = user;
+      const { email, password, name = '' } = user;
       // TODO: re-code to static method at model ?and use next()?
       const isAlreadyExists = await UserModel.exists({
         email,
@@ -86,12 +86,14 @@ module.exports = ((config, UserModel, SessionModel) => {
         const newUser = await UserModel.create({
           email,
           password,
+          name,
         });
 
         return {
           status: 201,
           user: {
             email: newUser.email,
+            name: newUser.name,
           },
         }
       } catch (e) {
