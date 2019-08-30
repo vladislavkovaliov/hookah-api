@@ -1,0 +1,10 @@
+BalanceCreate:
+  type: "object"
+  properties:
+    userId:
+      type: "string"
+      description: "TBD"
+    amount:
+      type: "number"
+    message:
+      type: "string"

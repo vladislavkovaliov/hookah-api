@@ -1,0 +1,45 @@
+paths:
+  /api/ping:
+    get:
+      tags:
+        - "api"
+      summary: ""
+      description: ""
+      operationId: "getPing"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Ping"
+        400:
+          description: "Invalid status value"
+  /api/config:
+    get:
+      tags:
+        - "api"
+      summary: ""
+      description: ""
+      operationId: "getConfig"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+        400:
+          description: "Invalid status value"
+definitions:
+  Ping:
+    type: "object"
+    properties:
+      message:
+        type: "string"

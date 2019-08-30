@@ -1,5 +1,7 @@
 const BalanceModel = require('../models/balance.model');
 const config = require('../config');
+const mongoose = require('mongoose');
+const { NotFound } = require('../errors');
 
 module.exports = ((config, BalanceModel) => {
   return {
@@ -13,16 +15,53 @@ module.exports = ((config, BalanceModel) => {
       const { userId, amount, message } = balance;
 
       try {
-        const b = await BalanceModel.create({
+        const balance = await BalanceModel.create({
           userId,
           amount,
           message,
         });
 
 
-        return b;
+        return balance;
       } catch (e) {
         console.trace(e);
+      }
+    },
+
+    updateBalance: async (balance) => {
+      const { userId, amount, message } = balance;
+      try {
+        const filter = {
+          _id: mongoose.Types.ObjectId(userId),
+          amount,
+          message,
+        };
+        const result = await BalanceModel.findOneAndUpdate(
+          filter,
+          balance,
+          { new: true },
+        );
+
+        return result._doc;
+      } catch (e) {
+        console.trace(e);
+      }
+    },
+
+    removeBalance: async (balance) => {
+      try {
+        const objectId = mongoose.Types.ObjectId(balance.id);
+        const result = await BalanceModel.findOneAndDelete({
+          _id: objectId,
+        });
+
+        debugger;
+        if (!result) {
+          throw new NotFound();
+        }
+      } catch (e) {
+        console.trace(e);
+        return e;
       }
     },
 

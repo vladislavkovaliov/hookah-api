@@ -1,0 +1,76 @@
+paths:
+  /api/auth/login:
+    post:
+      tags:
+        - "auth"
+      summary: ""
+      description: ""
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The user that needs to login"
+          required: true
+          type: "string"
+          schema:
+            $ref: "#/definitions/UserLogin"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Invalid status value"
+  /api/auth/register:
+    post:
+      tags:
+        - "auth"
+      summary: ""
+      description: ""
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The user that needs to login"
+          required: true
+          type: "string"
+          schema:
+            $ref: "#/definitions/UserRegister"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Invalid status value"
+  /api/auth/logout:
+    delete:
+      tags:
+        - "auth"
+      summary: ""
+      description: ""
+      parameters:
+        - name: hookah-jwt
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+      responses:
+        200:
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Invalid status value"

@@ -4,13 +4,23 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
-const swaggerDocument = process.env.NODE_ENV === 'production'
-  ? YAML.load('./src/swagger.production.yaml')
-  : YAML.load('./src/swagger.yaml');
+const swaggerJSDoc = require('swagger-jsdoc');
 mongoose.Promise = Promise;
 const config = require('./config');
-
+const swaggerDefinition = {
+  info: {
+    title: 'Hookah App',
+    version: '1.0.0',
+    description: 'TBD',
+  },
+  host: process.env.NODE_ENV ? 'localhost:3000' : 'hookah-api.herokuapp.com',
+  basePath: '/',
+};
+const options = {
+  swaggerDefinition,
+  apis: ['**/*.yaml'],
+};
+const swaggerSpec = swaggerJSDoc(options);
 const app = express();
 
 mongoose
@@ -44,7 +54,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(process.env.PORT || config.port, () => {
   console.log('start on', config.port);

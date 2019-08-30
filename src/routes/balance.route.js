@@ -15,7 +15,7 @@ module.exports = ((config, balance) => {
   });
 
   route.post('/', async (req, res) => {
-    const { userId, amount, message } = req.body;
+    const { userId, amount, message, } = req.body;
 
     const response = await balance.createBalance({
       userId,
@@ -24,6 +24,35 @@ module.exports = ((config, balance) => {
     });
 
     res.status(201).json({
+      ...response,
+    });
+  });
+
+  route.put('/', async (req, res, next) => {
+    const { userId, amount, message, } = req.body;
+    const response = await balance.updateBalance({
+      userId,
+      amount,
+      message,
+    });
+
+    res.json({
+      ...response,
+    })
+  });
+
+  route.delete('/:id', async (req, res, next) => {
+    const { id } = req.params;
+    const response = await balance.removeBalance({
+      id,
+    });
+
+    if (response instanceof Error) {
+      next(response);
+      return;
+    }
+
+    res.json({
       ...response,
     });
   });
