@@ -13,7 +13,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'TBD',
   },
-  host: process.env.NODE_ENV ? 'localhost:3000' : 'hookah-api.herokuapp.com',
+  host: process.env.NODE_ENV === 'production' ? 'hookah-api.herokuapp.com' : 'localhost:3000',
   basePath: '/',
 };
 const options = {
