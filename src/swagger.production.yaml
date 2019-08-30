@@ -50,19 +50,19 @@ paths:
   /api/users:
     get:
       tags:
-      - "users"
+        - "users"
       summary: "Get all users"
       description: ""
       operationId: "getAllUsers"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: hookah-jwt
-        in: header
-        description: an authorization header
-        type: string
+        - name: hookah-jwt
+          in: header
+          description: an authorization header
+          type: string
       responses:
         200:
           description: "successful operation"
@@ -83,13 +83,13 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "The user that needs to create"
-        required: true
-        type: "string"
-        schema:
-          $ref: "#/definitions/UserCreate"
+        - in: "body"
+          name: "body"
+          description: "The user that needs to create"
+          required: true
+          type: "string"
+          schema:
+            $ref: "#/definitions/UserCreate"
       responses:
         200:
           description: "successful operation"
@@ -107,15 +107,15 @@ paths:
       description: ""
       operationId: "getUserById"
       parameters:
-      - name: hookah-jwt
-        in: header
-        description: an authorization header
-        type: string
-      - name: "id"
-        in: "path"
-        description: "The user id that needs to be found"
-        required: true
-        type: "string"
+        - name: hookah-jwt
+          in: header
+          description: an authorization header
+          type: string
+        - name: "id"
+          in: "path"
+          description: "The user id that needs to be found"
+          required: true
+          type: "string"
       responses:
         200:
           schema:
@@ -132,22 +132,22 @@ paths:
       description: ""
       operationId: "updateUser"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "The user id that needs to be removed"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "The user that needs to update"
-        required: true
-        type: "string"
-        schema:
-          $ref: "#/definitions/UserPut"
+        - name: "id"
+          in: "path"
+          description: "The user id that needs to be removed"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "The user that needs to update"
+          required: true
+          type: "string"
+          schema:
+            $ref: "#/definitions/UserPut"
       responses:
         200:
           description: "successful operation"
@@ -164,15 +164,15 @@ paths:
       description: ""
       operationId: "removeUser"
       parameters:
-      - name: hookah-jwt
-        in: header
-        description: an authorization header
-        type: string
-      - name: "id"
-        in: "path"
-        description: "The user id that needs to be removed"
-        required: true
-        type: "string"
+        - name: hookah-jwt
+          in: header
+          description: an authorization header
+          type: string
+        - name: "id"
+          in: "path"
+          description: "The user id that needs to be removed"
+          required: true
+          type: "string"
       responses:
         200:
           schema:
@@ -185,14 +185,14 @@ paths:
   /api/ping:
     get:
       tags:
-      - "api"
+        - "api"
       summary: ""
       description: ""
       operationId: "getPing"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       responses:
         200:
           description: "successful operation"
@@ -205,14 +205,14 @@ paths:
   /api/config:
     get:
       tags:
-      - "api"
+        - "api"
       summary: ""
       description: ""
       operationId: "getConfig"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       responses:
         200:
           description: "successful operation"
@@ -253,14 +253,14 @@ paths:
           description: "Invalid status value"
     get:
       tags:
-      - "balances"
+        - "balances"
       summary: ""
       description: ""
       operationId: "getAllBalances"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       responses:
         200:
           schema:
@@ -272,27 +272,27 @@ paths:
   /api/balances/{balanceId}:
     patch:
       tags:
-      - "balances"
+        - "balances"
       summary: ""
       description: ""
       operationId: "get(debit|credit)"
       parameters:
-      - name: "balanceId"
-        in: "path"
-        description: "The balance id that needs to be updated"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "The balance id that needs to be updated"
-        required: true
-        type: "string"
-        schema:
-          $ref: "#/definitions/BalanceAction"
+        - name: "balanceId"
+          in: "path"
+          description: "The balance id that needs to be updated"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "The balance id that needs to be updated"
+          required: true
+          type: "string"
+          schema:
+            $ref: "#/definitions/BalanceAction"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       responses:
         200:
           schema:
@@ -304,21 +304,21 @@ paths:
   /api/auth/login:
     post:
       tags:
-      - "auth"
+        - "auth"
       summary: ""
       description: ""
       parameters:
-      - in: "body"
-        name: "body"
-        description: "The user that needs to login"
-        required: true
-        type: "string"
-        schema:
-          $ref: "#/definitions/UserLogin"
+        - in: "body"
+          name: "body"
+          description: "The user that needs to login"
+          required: true
+          type: "string"
+          schema:
+            $ref: "#/definitions/UserLogin"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       responses:
         200:
           schema:
@@ -358,15 +358,15 @@ paths:
   /api/auth/logout:
     delete:
       tags:
-      - "auth"
+        - "auth"
       summary: ""
       description: ""
       parameters:
-      - name: hookah-jwt
-        in: header
-        description: an authorization header
-        required: true
-        type: string
+        - name: hookah-jwt
+          in: header
+          description: an authorization header
+          required: true
+          type: string
       responses:
         200:
           schema:
@@ -412,8 +412,8 @@ definitions:
         type: "string"
         description: "TBD"
         enum:
-        - "debit"
-        - "credit"
+          - "debit"
+          - "credit"
       amount:
         type: "number"
   UserLogin:
@@ -428,8 +428,8 @@ definitions:
         type: "string"
         description: "TBD"
         enum:
-        - "jwt"
-        - "TBD"
+          - "jwt"
+          - "TBD"
   UserPut:
     type: "object"
     properties:
@@ -448,23 +448,23 @@ definitions:
         type: "string"
       password:
         type: "string"
-    UserRegister:
-      type: "object"
-      properties:
-        email:
-          type: "string"
-          description: "TBD"
-        name:
-          type: "string"
-        password:
-          type: "string"
-    BalanceCreate:
-      type: "object"
-      properties:
-        userId:
-          type: "string"
-          description: "TBD"
-        amount:
-          type: "number"
-        message:
-          type: "string"
+  UserRegister:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "TBD"
+      name:
+        type: "string"
+      password:
+        type: "string"
+  BalanceCreate:
+    type: "object"
+    properties:
+      userId:
+        type: "string"
+        description: "TBD"
+      amount:
+        type: "number"
+      message:
+        type: "string"
