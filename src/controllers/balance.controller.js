@@ -11,20 +11,38 @@ module.exports = ((config, BalanceModel) => {
       return balances;
     },
 
+    getBalanceById: async (balance) => {
+      try {
+        const _id = mongoose.Types.ObjectId(balance.id);
+        const result = await BalanceModel.findOne({
+          _id,
+        });
+
+        if (!result) {
+          throw new NotFound();
+        }
+
+        return result._doc;
+      } catch (e) {
+        console.trace(e);
+        return e;
+      }
+    },
+
     createBalance: async (balance) => {
       const { userId, amount, message } = balance;
 
       try {
         const balance = await BalanceModel.create({
-          userId,
+          userId: mongoose.Types.ObjectId(userId),
           amount,
           message,
         });
 
-
-        return balance;
+        return balance._doc;
       } catch (e) {
         console.trace(e);
+        return e;
       }
     },
 
@@ -45,6 +63,7 @@ module.exports = ((config, BalanceModel) => {
         return result._doc;
       } catch (e) {
         console.trace(e);
+        return e;
       }
     },
 
@@ -55,10 +74,11 @@ module.exports = ((config, BalanceModel) => {
           _id: objectId,
         });
 
-        debugger;
         if (!result) {
           throw new NotFound();
         }
+
+        return result._doc;
       } catch (e) {
         console.trace(e);
         return e;

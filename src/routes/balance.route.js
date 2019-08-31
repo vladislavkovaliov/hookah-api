@@ -10,13 +10,31 @@ module.exports = ((config, balance) => {
     const response = await balance.getAllBalances();
 
     res.json({
-      ...response,
+      data: response,
     });
+  });
+
+  route.get('/:id', async (req, res, next) => {
+    const { id } = req.params;
+    const response = await balance.getBalanceById({
+      id,
+    });
+
+    // TODO: create middleware for error obtain
+    if (response instanceof Error) {
+      next(response);
+      return;
+    }
+
+    res
+      .status(200)
+      .json({
+        ...response,
+      });
   });
 
   route.post('/', async (req, res) => {
     const { userId, amount, message, } = req.body;
-
     const response = await balance.createBalance({
       userId,
       amount,

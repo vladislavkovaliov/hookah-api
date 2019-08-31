@@ -3,8 +3,8 @@ paths:
     post:
       tags:
         - "balances"
-      symmary: ""
-      descrpition: ""
+      summary: "Create a new balance"
+      description: "Create a new balance"
       operationId: "createBalance"
       consumes:
         - "application/json"
@@ -33,7 +33,7 @@ paths:
     get:
       tags:
         - "balances"
-      summary: ""
+      summary: "Get all balances"
       description: ""
       operationId: "getAllBalances"
       consumes:
@@ -49,12 +49,91 @@ paths:
         400:
           description: "Invalid status value"
   /api/balances/{balanceId}:
+    get:
+      tags:
+        - "balances"
+      summary: "Get information about balance by balance id"
+      description: "TBD"
+      operationId: "getBalanceById"
+      parameters:
+        - name: "balanceId"
+          in: "path"
+          description: "TDB"
+          required: true
+          type: "string"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Balance"
+        400:
+          description: "Invalid status value"
     patch:
       tags:
         - "balances"
-      summary: ""
-      description: ""
+      summary: "Manipulate with balance by action (debit|credit)"
+      description: "TDB"
       operationId: "get(debit|credit)"
+      parameters:
+        - name: "balanceId"
+          in: "path"
+          description: "The balance id that needs to be updated"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "The balance that needs to be updated"
+          required: true
+          type: "string"
+          schema:
+            $ref: "#/definitions/BalanceAction"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Balance"
+        400:
+          description: "Invalid status value"
+    delete:
+      tags:
+        - "balances"
+      summary: "removeBalance"
+      description: "Remove balance by id"
+      operationId: "removeBalance"
+      parameters:
+        - name: "balanceId"
+          in: "path"
+          description: "The balance id that needs to be removed"
+          required: true
+          type: "string"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Balance"
+        400:
+          description: "Invalid status value"
+    put:
+      tags:
+        - "balances"
+      summary: "Update a balance"
+      description: "Update a balance"
+      operationId: "updateBalance"
       parameters:
         - name: "balanceId"
           in: "path"
@@ -67,7 +146,7 @@ paths:
           required: true
           type: "string"
           schema:
-            $ref: "#/definitions/BalanceAction"
+            $ref: "#/definitions/BalanceUpdate"
       consumes:
         - "application/json"
       produces:
@@ -93,24 +172,42 @@ definitions:
         type: "string"
       createdAt:
         type: "string"
-    BalanceAction:
-      type: "object"
-      properties:
-        action:
-          type: "string"
-          description: "TBD"
-          enum:
-            - "debit"
-            - "credit"
-        amount:
-          type: "number"
-    BalanceCreate:
-      type: "object"
-      properties:
-        userId:
-          type: "string"
-          description: "TBD"
-        amount:
-          type: "number"
-        message:
-          type: "string"
+  BalanceDelete:
+    type: "object"
+    properties:
+      balanceId:
+        type: "string"
+        description: "TBD"
+  BalanceAction:
+    type: "object"
+    properties:
+      action:
+        type: "string"
+        description: "TBD"
+        enum:
+          - "debit"
+          - "credit"
+      amount:
+        type: "number"
+  BalanceCreate:
+    type: "object"
+    properties:
+      userId:
+        type: "string"
+        description: "TBD"
+      amount:
+        type: "number"
+      message:
+        type: "string"
+  BalanceUpdate:
+    type: "object"
+    properties:
+      userId:
+        type: "string"
+        description: "TDB"
+      amount:
+        type: "number"
+        description: "TBD"
+      message:
+        type: "string"
+        description: "TBD"
