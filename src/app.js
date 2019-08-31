@@ -18,7 +18,7 @@ const swaggerDefinition = {
 };
 const options = {
   swaggerDefinition,
-  apis: ['**/*.yaml'],
+  apis: ['src/docs/**/*.yaml'],
 };
 const swaggerSpec = swaggerJSDoc(options);
 const app = express();
