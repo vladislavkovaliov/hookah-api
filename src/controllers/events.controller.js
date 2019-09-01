@@ -1,7 +1,8 @@
 const config = require('../config');
 const EventModel = require('../models/event.model');
 const UserModel = require('../models/user.model');
-
+const mongoose = require('mongoose');
+const { NotFound } = require('../errors');
 
 module.exports = ((config, EventModel, UserModel) => {
   const _eventExists = async (event) => {
@@ -20,24 +21,32 @@ module.exports = ((config, EventModel, UserModel) => {
       return events;
     },
 
-    createEvent: async function (event) {
+    getEventById: async (event) => {
       try {
-        const isEventExists = await _eventExists(event);
+        const _id = mongoose.Types.ObjectId(event.id);
 
-        if(isEventExists) {
-          return {
-            message: 'Event already is in db.'
-          };
+        if (!(await EventModel.exists({ _id }))) {
+          throw new NotFound();
         }
 
-        const newEvent = await EventModel.create(
+        const result = await EventModel.findOne({
+          _id,
+        });
+
+        return result._doc;
+      } catch (e) {
+        console.trace(e);
+        return e;
+      }
+    },
+
+    createEvent: async function (event) {
+      try {
+        const result = await EventModel.create(
           event,
         );
 
-        return {
-          status: 201,
-          event: newEvent,
-        };
+        return result._doc;
       }
       catch (e) {
         console.trace(e);

@@ -6,7 +6,20 @@ const Event = require('../controllers/events.controller');
 module.exports = ((config, event) => {
   const route = express.Router();
 
-  route.post('/', async (req, res) => {
+  route.get('/', async (req, res, next) => {
+    const response = await event.getAllEvents();
+
+    if (response instanceof Error) {
+      next(response);
+      return;
+    }
+
+    res.json({
+      data: response,
+    });
+  });
+
+  route.post('/', async (req, res, next) => {
     const {
       name,
       startDate,
@@ -20,7 +33,29 @@ module.exports = ((config, event) => {
       attendants,
     });
 
-    res.status(201).json({ ...response });
+    if (response instanceof Error) {
+      next(response);
+      return;
+    }
+
+    res
+      .status(201)
+      .json({ ...response });
+  });
+
+  route.get('/:id', async (req, res, next) => {
+    const { id } = req.params;
+    const response = await event.getEventById({
+      id,
+    });
+
+    if (response instanceof Error) {
+      next(response);
+      return;
+    }
+
+    res
+      .json({ ...response });
   });
 
   route.patch('/pushAttentands', async (req, res) => {

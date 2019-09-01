@@ -27,8 +27,9 @@ module.exports = ((config, user) => {
       password,
     });
 
-    if (response.code) {
+    if (response instanceof Error) {
       next(response);
+      return;
     }
 
     res.status(201).json({
@@ -42,8 +43,9 @@ module.exports = ((config, user) => {
       id,
     });
 
-    if (response.code) {
+    if (response instanceof Error) {
       next(response);
+      return;
     }
 
     res.json({
@@ -53,15 +55,14 @@ module.exports = ((config, user) => {
 
   route.put('/:id', async (req, res, next) => {
     const { id } = req.params;
-    const { email, password } = req.body;
     const response = await user.updateUser({
       id,
-      email,
-      password,
+      ...req.body,
     });
 
-    if (response.code) {
+    if (response instanceof Error) {
       next(response);
+      return;
     }
 
     res.json({
@@ -75,8 +76,9 @@ module.exports = ((config, user) => {
       id,
     });
 
-    if (response.code) {
+    if (response instanceof Error) {
       next(response);
+      return;
     }
 
     res.json({

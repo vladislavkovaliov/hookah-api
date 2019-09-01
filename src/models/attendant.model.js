@@ -2,16 +2,18 @@ const mongoose = require('mongoose');
 
 const attendantSchema = new mongoose.Schema(
   {
-    userId: {
+    user: {
       type: mongoose.Schema.Types.ObjectId, ref: 'User',
       require: true,
     },
     guests: {
       type: Array,
-      default: [],
+      default: [{}],
     },
   },
   { timestamp: true },
 );
 
-module.exports = mongoose.model("Attendant", attendantSchema);
+const Attendant = mongoose.model("Attendant", attendantSchema);
+
+module.exports = Attendant;

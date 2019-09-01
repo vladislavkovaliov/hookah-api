@@ -6,9 +6,18 @@ const eventSchema = new mongoose.Schema(
       type: String,
       unique: true
     },
-    startDate: Date,
-    endDate: Date,
-    attendants: Array,
+    startDate: {
+      type: Date,
+      default: Date.now(),
+    },
+    endDate: {
+      type: Date,
+      default: null,
+    },
+    attendants: {
+      type: Array,
+      default: [],
+    },
   },
   { timestamps: true },
 );
