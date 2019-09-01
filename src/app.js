@@ -48,6 +48,7 @@ app.use('/api/balances', require('./routes/balance.route'));
 app.use('/api/auth', require('./routes/auth.route'));
 app.use('/api/events', require('./routes/event.route'));
 
+// eslint-disable-next-line
 app.use((err, req, res, next) => {
   res.json({
       ...err,

@@ -101,14 +101,14 @@ module.exports = ((config, UserModel, SessionModel) => {
       }
     },
 
-    /**
-     * @param {Object}
-     */
-    refresh: () => {
-      return {
-        token,
-      };
-    },
+    // /**
+    //  * @param {Object}
+    //  */
+    // refresh: () => {
+    //   return {
+    //     token,
+    //   };
+    // },
   };
 })(config, UserModel, SessionModel);
 

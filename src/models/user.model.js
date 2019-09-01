@@ -1,35 +1,45 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const { InvalidLoginCredentialsError } = require('../errors');
 
-const userSchema = new mongoose.Schema({
-  email: { type: String, unique: true },
-  name: { type: String, default: 'No name' },
-  password: { type: String, },
-  balance: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: null,
-    ref: 'Balance',
-  },
-  passwordResetToken: String,
-  passwordResetExpires: Date,
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      unique: true
+    },
+    name: {
+      type: String,
+      default: 'No name'
+    },
+    password: {
+      type: String,
+    },
+    balance: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: null,
+      ref: 'Balance',
+    },
+    passwordResetToken: String,
+    passwordResetExpires: Date,
 
-  facebook: String,
-  twitter: String,
-  google: String,
-  tokens: Array,
+    facebook: String,
+    twitter: String,
+    google: String,
+    tokens: Array,
 
-  profile: {
-    name: String,
-    gender: String,
-    location: String,
-    website: String,
-    picture: String
+    profile: {
+      name: String,
+      gender: String,
+      location: String,
+      website: String,
+      picture: String
+    },
   },
-}, { timestamps: true });
-// userSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60000 / 60 });
+  { timestamps: true },
+);
 
 /**
  * Password hash middleware.
