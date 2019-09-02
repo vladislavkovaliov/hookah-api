@@ -22,5 +22,9 @@ module.exports = ((config, api) => {
     );
   });
 
+  route.post('/client', async (req, res) => {
+    res.json(req.body);
+  });
+
   return route;
 })(config, Api);
