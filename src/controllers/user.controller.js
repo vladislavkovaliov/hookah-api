@@ -90,15 +90,10 @@ module.exports = ((config, UserModel, TransactionModel) => {
     getUserById: async (user) => {
       try {
         const _id = mongoose.Types.ObjectId(user.id);
-        // const result = await UserModel.findOne({
-        //   _id,
-        // })
-        //   .populate('balance');
-        //
         const result = await UserModel.aggregate([
           {
             $match: {
-              _id,//: mongoose.Types.ObjectId(user.id),
+              _id,
             },
           },
           {
@@ -123,17 +118,7 @@ module.exports = ((config, UserModel, TransactionModel) => {
             },
           },
         ]);
-        // console.(result);
 
-        // const [result, transactions] = await Promise.all([
-        //   UserModel.findOne({
-        //     _id,
-        //   }).populate('balance'),
-        //   TransactionModel.find({
-        //     userId: _id,
-        //   }),
-        // ]);
-        // console.log(transactions);
         if (!result) {
           throw new NotFound();
         }

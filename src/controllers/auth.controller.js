@@ -1,9 +1,10 @@
 const config = require('../config');
 const UserModel = require('../models/user.model');
+const ProfileModel = require('../models/profile.model');
 const SessionModel = require('../models/session.model');
 const jwt = require('jsonwebtoken');
 
-module.exports = ((config, UserModel, SessionModel) => {
+module.exports = ((config, UserModel, SessionModel, ProfileModel) => {
   return {
     /**
      *
@@ -14,7 +15,7 @@ module.exports = ((config, UserModel, SessionModel) => {
       const { email, password } = user;
 
       try {
-        const user = await UserModel.findByCredentials(email, password);
+        const user = await ProfileModel.findByCredentials(email, password);
         const token = jwt.sign(
           {
             _id: user._id,
@@ -29,7 +30,7 @@ module.exports = ((config, UserModel, SessionModel) => {
             userId: user._id,
             token,
           }),
-          await UserModel.findOneAndUpdate(
+          await ProfileModel.findOneAndUpdate(
             { email, password, },
             { tokens: [...user.tokens, token] }, // TODO: use $push
           ),
@@ -47,14 +48,14 @@ module.exports = ((config, UserModel, SessionModel) => {
 
     logout: async (token) => {
       const filter = { tokens: { $in: [token] } };
-      const oldUser = await UserModel.findOne(filter);
+      const oldUser = await ProfileModel.findOne(filter);
 
       if (!oldUser) {
         return {};
       }
 
       // TODO: remove after middleware will be implemented
-      await UserModel.findOneAndUpdate(
+      await ProfileModel.findOneAndUpdate(
         filter,
         {
           tokens: oldUser.tokens.filter(t => t !== token),
@@ -72,7 +73,7 @@ module.exports = ((config, UserModel, SessionModel) => {
     register: async (user) => {
       const { email, password, name = '' } = user;
       // TODO: re-code to static method at model ?and use next()?
-      const isAlreadyExists = await UserModel.exists({
+      const isAlreadyExists = await ProfileModel.exists({
         email,
       });
 
@@ -83,7 +84,7 @@ module.exports = ((config, UserModel, SessionModel) => {
       }
 
       try {
-        const newUser = await UserModel.create({
+        const newUser = await ProfileModel.create({
           email,
           password,
           name,
@@ -110,7 +111,7 @@ module.exports = ((config, UserModel, SessionModel) => {
     //   };
     // },
   };
-})(config, UserModel, SessionModel);
+})(config, UserModel, SessionModel, ProfileModel);
 
 /**
  * @typedef {Object} User
