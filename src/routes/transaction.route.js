@@ -35,10 +35,11 @@ module.exports = ((config, transaction) => {
   });
 
   route.post('/', async (req, res, next) => {
-    const { amount, userId, } = req.body;
+    const { amount, userId, date, } = req.body;
     const response = await transaction.createTransaction({
       amount,
       userId,
+      date,
     });
 
     if (response instanceof Error) {
@@ -55,11 +56,12 @@ module.exports = ((config, transaction) => {
 
   route.put('/:id', async (req, res, next) => {
     const { id, } = req.params;
-    const { amount, userId, } = req.body;
+    const { amount, userId, date } = req.body;
     const response = await transaction.updateTransaction({
       _id: id,
       amount,
       userId,
+      date,
     });
 
     if (response instanceof Error) {

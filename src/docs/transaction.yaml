@@ -140,6 +140,9 @@ definitions:
         type: "string"
         description: "TBD"
         required: true
+      date:
+        type: "date"
+        description: "TDB"
   TransactionDelete:
     type: "object"
     properties:
@@ -151,17 +154,10 @@ definitions:
         type: "string"
         description: "TBD"
         required: true
-  TransactionAction:
-    type: "object"
-    properties:
-      amount:
-        type: "number"
-        description: "TBD"
-        required: true
-      userId:
+      date:
         type: "string"
-        description: "TBD"
-        required: true
+        format: "date"
+        description: "TDB"
   TransactionCreate:
     type: "object"
     properties:
@@ -173,6 +169,10 @@ definitions:
         type: "string"
         description: "TBD"
         required: true
+      date:
+        type: "string"
+        format: "date"
+        description: "TDB"
   TransactionUpdate:
     type: "object"
     properties:
@@ -184,3 +184,7 @@ definitions:
         type: "string"
         description: "TBD"
         required: true
+      date:
+        type: "string"
+        format: "date"
+        description: "TDB"

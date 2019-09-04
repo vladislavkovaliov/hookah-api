@@ -9,6 +9,10 @@ const transactionSchema = new mongoose.Schema(
     amount: {
       type: Number,
     },
+    date: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true },
 );
