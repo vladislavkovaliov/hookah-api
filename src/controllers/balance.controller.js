@@ -51,14 +51,16 @@ module.exports = ((config, BalanceModel) => {
       try {
         const filter = {
           _id: mongoose.Types.ObjectId(userId),
-          amount,
-          message,
         };
         const result = await BalanceModel.findOneAndUpdate(
           filter,
           balance,
           { new: true },
         );
+
+        if (!result) {
+          throw new NotFound();
+        }
 
         return result._doc;
       } catch (e) {

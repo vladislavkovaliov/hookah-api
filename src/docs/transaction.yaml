@@ -1,0 +1,186 @@
+paths:
+  /api/transaction:
+    post:
+      tags:
+        - "transaction"
+      summary: "Create a new transaction"
+      description: "Create a new transaction"
+      operationId: "createTransaction"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: hookah-jwt
+          in: header
+          description: an authorization header
+          type: string
+        - in: "body"
+          name: "body"
+          description: "The transaction that needs to create"
+          required: true
+          type: "string"
+          schema:
+            $ref: "#/definitions/TransactionCreate"
+      responses:
+        200:
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/TransactionCreate"
+        400:
+          description: "Invalid status value"
+    get:
+      tags:
+        - "transaction"
+      summary: "Get all transactions"
+      description: ""
+      operationId: "getAllTransaction"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Transaction"
+        400:
+          description: "Invalid status value"
+  /api/transaction/{transactionId}:
+    delete:
+      tags:
+        - "transaction"
+      summary: "removeTransaction"
+      description: "Remove transaction by id"
+      operationId: "removeTransaction"
+      parameters:
+        - name: "transactionId"
+          in: "path"
+          description: "The transaction id that needs to be removed"
+          required: true
+          type: "string"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Transaction"
+        400:
+          description: "Invalid status value"
+    get:
+      tags:
+        - "transaction"
+      summary: "Get information about transaction by transaction id"
+      description: "TBD"
+      operationId: "getTransactionById"
+      parameters:
+        - name: "transactionId"
+          in: "path"
+          description: "TDB"
+          required: true
+          type: "string"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Transaction"
+        400:
+          description: "Invalid status value"
+    put:
+      tags:
+        - "transaction"
+      summary: "Update a transaction"
+      description: "Update a transaction"
+      operationId: "updateTransaction"
+      parameters:
+        - name: "transactionId"
+          in: "path"
+          description: "The transaction id that needs to be updated"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "The transaction id that needs to be updated"
+          required: true
+          type: "string"
+          schema:
+            $ref: "#/definitions/TransactionUpdate"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Transaction"
+        400:
+          description: "Invalid status value"
+definitions:
+  Transaction:
+    type: "object"
+    properties:
+      amount:
+        type: "number"
+        description: "TBD"
+        required: true
+      userId:
+        type: "string"
+        description: "TBD"
+        required: true
+  TransactionDelete:
+    type: "object"
+    properties:
+      amount:
+        type: "number"
+        description: "TBD"
+        required: true
+      userId:
+        type: "string"
+        description: "TBD"
+        required: true
+  TransactionAction:
+    type: "object"
+    properties:
+      amount:
+        type: "number"
+        description: "TBD"
+        required: true
+      userId:
+        type: "string"
+        description: "TBD"
+        required: true
+  TransactionCreate:
+    type: "object"
+    properties:
+      amount:
+        type: "number"
+        description: "TBD"
+        required: true
+      userId:
+        type: "string"
+        description: "TBD"
+        required: true
+  TransactionUpdate:
+    type: "object"
+    properties:
+      amount:
+        type: "number"
+        description: "TBD"
+        required: true
+      userId:
+        type: "string"
+        description: "TBD"
+        required: true
