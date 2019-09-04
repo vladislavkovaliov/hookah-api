@@ -1,28 +1,14 @@
 const UserModel = require('../models/user.model');
-const TransactionModel = require('../models/transaction.model');
 const config = require('../config');
 const mongoose = require('mongoose');
 const { NotFound } = require('../errors');
 
-module.exports = ((config, UserModel, TransactionModel) => {
+module.exports = ((config, UserModel) => {
   return {
     getAllUsers: async () => {
       try {
         const users = await UserModel
           .find();
-          // .populate('balance');
-          // .populate('transactions');
-
-        // const users = await UserModel.aggregate([
-        //   {
-        //     $lookup: {
-        //       from: 'balances',
-        //       localField: "_id",
-        //       foreignField: "userId",
-        //       as: "inventory_docs"
-        //     },
-        //   },
-        // ]);
 
         return users.map(u => ({
           _id: u._id,
@@ -130,4 +116,4 @@ module.exports = ((config, UserModel, TransactionModel) => {
       }
     },
   };
-})(config, UserModel, TransactionModel);
+})(config, UserModel);
