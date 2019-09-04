@@ -17,16 +17,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
     },
-    balance: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: null,
-      ref: 'Balance',
-    },
-    transactions: [{
-      type: mongoose.Schema.Types.ObjectId,
-      default: [],
-      ref: 'Transaction',
-    }],
+    
     passwordResetToken: String,
     passwordResetExpires: Date,
     imageUrl: {
