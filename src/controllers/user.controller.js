@@ -119,7 +119,7 @@ module.exports = ((config, UserModel, TransactionModel) => {
           },
         ]);
 
-        if (!result) {
+        if (!result || result.length === 0) {
           throw new NotFound();
         }
 
