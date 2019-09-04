@@ -26,5 +26,16 @@ module.exports = ((config, api) => {
     res.json(req.body);
   });
 
+  route.post('/push', async (req, res, next) => {
+    const response = await api.push(req.body);
+
+
+    res
+      .status(201)
+      .json({
+        ...response
+      });
+  });
+
   return route;
 })(config, Api);

@@ -22,9 +22,17 @@ const userSchema = new mongoose.Schema(
       default: null,
       ref: 'Balance',
     },
+    transactions: [{
+      type: mongoose.Schema.Types.ObjectId,
+      default: [],
+      ref: 'Transaction',
+    }],
     passwordResetToken: String,
     passwordResetExpires: Date,
-
+    imageUrl: {
+      type: String,
+      default: 'https://gravatar.com/avatar/?s=200&d=retro',
+    },
     facebook: String,
     twitter: String,
     google: String,
@@ -41,9 +49,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-/**
- * Password hash middleware.
- */
 // userSchema.pre("save", function save(next) {
 //   const user = this as UserDocument;
 //
@@ -62,7 +67,6 @@ const userSchema = new mongoose.Schema(
 // });
 
 userSchema.methods.generateAuthToken = async function() {
-  // Generate an auth token for the user
   const user = this;
   const token = jwt.sign(
     { _id: user._id },
@@ -77,7 +81,6 @@ userSchema.methods.generateAuthToken = async function() {
 };
 
 userSchema.statics.findByCredentials = async (email, password) => {
-  // Search for a user by email and password.
   const user = await User.findOne({ email });
   if (!user) {
     throw new InvalidLoginCredentialsError();
@@ -91,9 +94,16 @@ userSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
-/**
- * Helper method for getting user's gravatar.
- */
+userSchema.statics.findByEmail = async (email) => {
+  const user = await User.findOne(
+    {
+      email,
+    },
+  );
+
+  return user;
+};
+
 userSchema.methods.gravatar = function (size = 200) {
   if (!this.email) {
     return `https://gravatar.com/avatar/?s=${size}&d=retro`;

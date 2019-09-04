@@ -10,6 +10,7 @@ module.exports = ((config, UserModel) => {
         const users = await UserModel
           .find()
           .populate('balance');
+          // .populate('transactions');
 
         // const users = await UserModel.aggregate([
         //   {
@@ -27,6 +28,8 @@ module.exports = ((config, UserModel) => {
           email: u.email,
           name: u.name,
           balance: u.balance,
+          imageUrl: u.imageUrl,
+          transactions: u.transactions,
         }));
       } catch (e) {
         console.trace(e);
