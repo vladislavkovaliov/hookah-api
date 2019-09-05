@@ -2,6 +2,7 @@ const UserModel = require('../models/user.model');
 const config = require('../config');
 const mongoose = require('mongoose');
 const { NotFound } = require('../errors');
+const _ = require('lodash');
 
 module.exports = ((config, UserModel) => {
   return {
@@ -73,7 +74,42 @@ module.exports = ((config, UserModel) => {
       }
     },
 
-    getUserById: async (user) => {
+    getUserById: async (user,) => {
+      try {
+        const _id = mongoose.Types.ObjectId(user.id);
+        const result = await UserModel.aggregate([
+          {
+            $match: {
+              _id,
+            },
+          },
+          {
+            $lookup: {
+              from: 'balances',
+              localField: '_id',
+              foreignField: 'userId',
+              as: 'balance',
+            },
+          },
+          {
+            $unwind: {
+              path: '$balance',
+            },
+          },
+        ]);
+
+        if (!result || result.length === 0) {
+          throw new NotFound();
+        }
+
+        return result[0];
+      } catch (e) {
+        console.trace(e);
+        return e;
+      }
+    },
+
+    getUserByIdWithTransactions: async (user) => {
       try {
         const _id = mongoose.Types.ObjectId(user.id);
         const result = await UserModel.aggregate([

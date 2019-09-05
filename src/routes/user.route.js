@@ -53,6 +53,24 @@ module.exports = ((config, user) => {
     });
   });
 
+  route.get('/:id/transactions', async (req, res, next) => {
+    const { id } = req.params;
+    const response = await user.getUserByIdWithTransactions(
+      {
+        id,
+      },
+    );
+
+    if (response instanceof Error) {
+      next(response);
+      return;
+    }
+
+    res.json({
+      ...response,
+    });
+  });
+
   route.put('/:id', async (req, res, next) => {
     const { id } = req.params;
     const response = await user.updateUser({
