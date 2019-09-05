@@ -85,8 +85,8 @@ module.exports = ((config, UserModel) => {
           {
             $lookup: {
               from: 'balances',
-              localField: 'balance',
-              foreignField: '_id',
+              localField: '_id',
+              foreignField: 'userId',
               as: 'balance',
             },
           },

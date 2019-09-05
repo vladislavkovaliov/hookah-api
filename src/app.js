@@ -21,8 +21,14 @@ const options = {
   apis: ['src/docs/**/*.yaml'],
 };
 const swaggerSpec = swaggerJSDoc(options);
+const passport = require('passport');
+const session = require('cookie-session');
 const app = express();
 
+const sessionMiddleware = session({
+  maxAge: 24*60*60*1000,
+  keys: ['cat'],
+});
 mongoose
   .connect(config.MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false } )
   .then(() => { /** ready to use. The `mongoose.connect()` promise resolves to undefined. */ })
@@ -38,14 +44,22 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 /**
  * Routers
  */
 app.use('/api', require('./routes/api.route'));
+app
+  .use(session({
+    maxAge: 24*60*60*1000,
+    keys: ['cat'],
+  })) 
+  .use('/api/auth', require('./routes/auth.route'));
 app.use('/api/users', require('./routes/user.route'));
 app.use('/api/balances', require('./routes/balance.route'));
-app.use('/api/auth', require('./routes/auth.route'));
 app.use('/api/transaction', require('./routes/transaction.route'));
 
 // eslint-disable-next-line
