@@ -56,12 +56,9 @@ module.exports = ((config, transaction) => {
 
   route.put('/:id', async (req, res, next) => {
     const { id, } = req.params;
-    const { amount, userId, date } = req.body;
     const response = await transaction.updateTransaction({
       _id: id,
-      amount,
-      userId,
-      date,
+      ...req.body,
     });
 
     if (response instanceof Error) {

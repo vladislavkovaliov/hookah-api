@@ -103,32 +103,6 @@ paths:
                 type: "string"
         400:
           description: "Invalid status value"
-  /api/users/{id}/transactions:
-    get:
-      tags:
-        - "users"
-      summary: "Return user by id with transactions"
-      description: ""
-      operationId: "getUserByIdWithTransactions"
-      parameters:
-        - name: hookah-jwt
-          in: header
-          description: an authorization header
-          type: string
-        - name: "id"
-          in: "path"
-          description: "The user id that needs to be found"
-          required: true
-          type: "string"
-      responses:
-        200:
-          schema:
-            type: "object"
-            properties:
-              token:
-                type: "string"
-        400:
-          description: "Invalid status value"
     put:
       tags:
         - "users"
@@ -142,7 +116,7 @@ paths:
       parameters:
         - name: "id"
           in: "path"
-          description: "The user id that needs to be removed"
+          description: "The user id that needs to be updated"
           required: true
           type: "string"
         - in: "body"
@@ -175,6 +149,32 @@ paths:
         - name: "id"
           in: "path"
           description: "The user id that needs to be removed"
+          required: true
+          type: "string"
+      responses:
+        200:
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Invalid status value"
+  /api/users/{id}/transactions:
+    get:
+      tags:
+        - "users"
+      summary: "Return user by id with transactions"
+      description: ""
+      operationId: "getUserByIdWithTransactions"
+      parameters:
+        - name: hookah-jwt
+          in: header
+          description: an authorization header
+          type: string
+        - name: "id"
+          in: "path"
+          description: "The user id that needs to be found"
           required: true
           type: "string"
       responses:
@@ -219,6 +219,8 @@ definitions:
         type: "string"
         description: "TBD"
       password:
+        type: "string"
+      name:
         type: "string"
   UserCreate:
     type: "object"
