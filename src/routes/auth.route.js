@@ -1,68 +1,31 @@
 const express = require('express');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 const passport = require('passport');
+const mongoose = require('mongoose');
+
 const config = require('../config');
 const Auth = require('../controllers/auth.controller');
-var GoogleStrategy = require('passport-google-oauth20').Strategy;
 const UserModel = require('../models/user.model');
 const BalanceModel = require('../models/balance.model');
-const mongoose = require('mongoose');
+const _ = require('lodash');
 
 module.exports = ((config, auth, passport, UserModel, BalanceModel) => {
   const route = express.Router();
 
-
-  route.post('/login', async (req, res, next) => {
-    const { email, password, strategy = 'jwt' } = req.body;
-    const response = await auth.login({
-      email,
-      password,
-    });
-
-    if (response instanceof Error) {
-      next(response);
-      return;
-    }
-
-    // res.;
-    res.header('hookah-jwt', response.token).status(200).json({
-      ...response,
-    });
-  });
-
-  route.post('/register', async (req, res) => {
-    const { email, password, strategy = 'jwt' } = req.body;
-    const response = await auth.register({
-      email,
-      password,
-    });
-
-    res.status(201).json({
-      ...response,
-    });
-  });
-
-  route.delete('/logout', async (req, res) => {
-    const token = req.headers['hookah-jwt'];
-    const response = await auth.logout(token);
-
-    res.json({
-      ...response,
-    });
-  });
-
-  passport.serializeUser((user, done) => {
-    done(null, user);
-  });
-
-  passport.deserializeUser(async (user, done) => {
-    const filter = {
-      email: user.email,
-    };
-    const result = await UserModel.findOne(filter);
-    if (!result) {
-      done(null, user);
-    }
-  });
+  passport.use(
+    new JwtStrategy({
+      // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: (req) => {
+        return req.header('hookah-jwt');
+      },
+      secretOrKey: 'secret',
+    },
+    function (jwt_payload, done) {
+      done(null, jwt_payload);
+    },
+  ));
 
   passport.use(
     new GoogleStrategy({
@@ -111,14 +74,72 @@ module.exports = ((config, auth, passport, UserModel, BalanceModel) => {
       }
     ));
 
-  route.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+  passport.serializeUser((user, done) => {
+    done(null, user);
+  });
+
+  passport.deserializeUser(async (user, done) => {
+    const filter = {
+      email: user.email,
+    };
+    const result = await UserModel.findOne(filter);
+    if (!result) {
+      done(null, user);
+    }
+  });
+
+  route.post('/login', async (req, res, next) => {
+    const { email, password, strategy = 'jwt' } = req.body;
+    const response = await auth.login({
+      email,
+      password,
+    });
+
+    if (response instanceof Error) {
+      next(response);
+      return;
+    }
+
+    // res.;
+    res.header('hookah-jwt', response.token).status(200).json({
+      ...response,
+    });
+  });
+
+  route.post('/register', async (req, res) => {
+    const { email, password, strategy = 'jwt' } = req.body;
+    const response = await auth.register({
+      email,
+      password,
+    });
+
+    res.status(201).json({
+      ...response,
+    });
+  });
+
+  route.delete('/logout', async (req, res) => {
+    const token = req.headers['hookah-jwt'];
+    const response = await auth.logout(token);
+
+    res.json({
+      ...response,
+    });
+  });
+
+  route.get(
+    '/google',
+    passport.authenticate(
+      'google',
+      {
+        scope: ['profile', 'email'],
+      },
+    ));
 
   route.get(
     '/google/redirect',
     passport.authenticate('google'),
     (req, res) => {
-      console.log(42);
-      console.log(req.user);
       res.redirect(`/api/users/${req.user._id}`);
     },
   );

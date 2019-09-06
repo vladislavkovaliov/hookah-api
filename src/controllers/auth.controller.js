@@ -21,20 +21,20 @@ module.exports = ((config, UserModel, SessionModel, ProfileModel) => {
             _id: user._id,
             email,
           },
-          'secret13',
+          'secret',
           { expiresIn: 60 * 60 },
         );
 
-        Promise.all([
-          await SessionModel.create({
-            userId: user._id,
-            token,
-          }),
-          await ProfileModel.findOneAndUpdate(
-            { email, password, },
-            { tokens: [...user.tokens, token] }, // TODO: use $push
-          ),
-        ]);
+        // Promise.all([
+        //   // await SessionModel.create({
+        //   //   userId: user._id,
+        //   //   token,
+        //   // }),
+        //   await ProfileModel.findOneAndUpdate(
+        //     { email, password, },
+        //     // { tokens: [...user.tokens, token] }, // TODO: use $push
+        //   ),
+        // ]);
 
         return {
           token,

@@ -25,10 +25,6 @@ const passport = require('passport');
 const session = require('cookie-session');
 const app = express();
 
-const sessionMiddleware = session({
-  maxAge: 24*60*60*1000,
-  keys: ['cat'],
-});
 mongoose
   .connect(config.MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false } )
   .then(() => { /** ready to use. The `mongoose.connect()` promise resolves to undefined. */ })
@@ -47,7 +43,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 /**
  * Routers
  */
@@ -55,8 +50,8 @@ app.use('/api', require('./routes/api.route'));
 app
   .use(session({
     maxAge: 24*60*60*1000,
-    keys: ['cat'],
-  })) 
+    keys: ['secret'],
+  }))
   .use('/api/auth', require('./routes/auth.route'));
 app.use('/api/users', require('./routes/user.route'));
 app.use('/api/balances', require('./routes/balance.route'));
