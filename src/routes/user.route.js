@@ -21,10 +21,8 @@ module.exports = ((config, user) => {
   });
 
   route.post('/', async (req, res, next) => {
-    const { email, password } = req.body;
     const response = await user.createUser({
-      email,
-      password,
+      ...req.body,
     });
 
     if (response instanceof Error) {
