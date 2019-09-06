@@ -46,13 +46,13 @@ app.use(passport.session());
 /**
  * Routers
  */
-app.use('/api', require('./routes/api.route'));
 app
   .use(session({
-    maxAge: 24*60*60*1000,
+    maxAge: 24 * 60 * 60 * 1000,
     keys: ['secret'],
   }))
-  .use('/api/auth', require('./routes/auth.route'));
+  .use('/api/auth', require('./routes/google.route'));
+app.use('/api/auth', require('./routes/auth.route'));
 app.use(
   '/api/users',
   passport.authenticate('jwt', { session: false }),
@@ -60,6 +60,7 @@ app.use(
 );
 app.use('/api/balances', require('./routes/balance.route'));
 app.use('/api/transaction', require('./routes/transaction.route'));
+app.use('/api', require('./routes/api.route'));
 
 // eslint-disable-next-line
 app.use((err, req, res, next) => {
