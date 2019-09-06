@@ -7,21 +7,18 @@ const Profile = require('../controllers/profile.controller');
 module.exports = ((config, user, profile) => {
   const route = express.Router();
 
-  route.get(
-    '/me',
-    passport.authenticate('jwt', { session: false }),
-    async (req, res, next) => {
-      const response = await profile.getProfileById(req.user);
+  route.get('/me', async (req, res, next) => {
+    const response = await profile.getProfileById(req.user);
 
-      if (response instanceof Error) {
-        next(response);
-        return;
-      }
+    if (response instanceof Error) {
+      next(response);
+      return;
+    }
 
-      res.json({
-        ...response,
-      });
+    res.json({
+      ...response,
     });
+  });
 
   route.get('/', async (req, res) => {
     const response = await user.getAllUsers();

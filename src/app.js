@@ -53,7 +53,11 @@ app
     keys: ['secret'],
   }))
   .use('/api/auth', require('./routes/auth.route'));
-app.use('/api/users', require('./routes/user.route'));
+app.use(
+  '/api/users',
+  passport.authenticate('jwt', { session: false }),
+  require('./routes/user.route'),
+);
 app.use('/api/balances', require('./routes/balance.route'));
 app.use('/api/transaction', require('./routes/transaction.route'));
 
