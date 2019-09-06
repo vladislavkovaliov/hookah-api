@@ -47,7 +47,7 @@ module.exports = ((config, BalanceModel) => {
     },
 
     updateBalance: async (balance) => {
-      const { userId, amount, message } = balance;
+      const { userId } = balance;
       try {
         const filter = {
           _id: mongoose.Types.ObjectId(userId),

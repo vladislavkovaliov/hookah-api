@@ -33,13 +33,19 @@ module.exports = ((config, balance) => {
       });
   });
 
-  route.post('/', async (req, res) => {
+  route.post('/', async (req, res, next) => {
     const { userId, amount, message, } = req.body;
     const response = await balance.createBalance({
       userId,
       amount,
       message,
     });
+
+    // TODO: create middleware for error obtain
+    if (response instanceof Error) {
+      next(response);
+      return;
+    }
 
     res.status(201).json({
       ...response,
@@ -53,6 +59,12 @@ module.exports = ((config, balance) => {
       amount,
       message,
     });
+
+    // TODO: create middleware for error obtain
+    if (response instanceof Error) {
+      next(response);
+      return;
+    }
 
     res.json({
       ...response,
@@ -75,7 +87,7 @@ module.exports = ((config, balance) => {
     });
   });
 
-  route.patch('/:balanceId', async (req, res) => {
+  route.patch('/:balanceId', async (req, res, next) => {
     const { balanceId } = req.params;
     const { action, amount } = req.body;
     const response = await Balance[action]({
@@ -83,6 +95,12 @@ module.exports = ((config, balance) => {
       action,
       amount,
     });
+
+    // TODO: create middleware for error obtain
+    if (response instanceof Error) {
+      next(response);
+      return;
+    }
 
     res.json({
       ...response,

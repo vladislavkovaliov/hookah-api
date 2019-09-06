@@ -36,6 +36,13 @@ paths:
       summary: "Get all transactions"
       description: ""
       operationId: "getAllTransaction"
+      parameters:
+        - in: "query"
+          name: "page"
+          type: "number"
+        - in: "query"
+          name: "limit"
+          type: "number"
       consumes:
         - "application/json"
       produces:

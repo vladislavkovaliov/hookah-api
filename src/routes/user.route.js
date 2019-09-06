@@ -1,5 +1,4 @@
 const express = require('express');
-const passport = require('passport');
 const config = require('../config');
 const User = require('../controllers/user.controller');
 const Profile = require('../controllers/profile.controller');

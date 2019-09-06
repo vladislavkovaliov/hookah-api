@@ -2,7 +2,6 @@ const UserModel = require('../models/user.model');
 const config = require('../config');
 const mongoose = require('mongoose');
 const { NotFound } = require('../errors');
-const _ = require('lodash');
 
 module.exports = ((config, UserModel) => {
   return {

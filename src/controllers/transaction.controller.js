@@ -7,7 +7,12 @@ module.exports = ((config, TransactionModel) => {
   return {
     getAllTransaction: async (filter) => {
       try {
-        const result = await TransactionModel.find();
+        const result = await TransactionModel.aggregate([
+          {
+            $sort: { 'date': -1 },
+          },
+          ...filter,
+        ]);
 
         return result;
       } catch (e) {
@@ -83,6 +88,10 @@ module.exports = ((config, TransactionModel) => {
         console.trace(e);
         return e;
       }
+    },
+
+    getCount:async () => {
+      return await TransactionModel.count();
     },
   };
 })(config, TransactionModel);

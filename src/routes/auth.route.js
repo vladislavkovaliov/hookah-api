@@ -4,9 +4,6 @@ const passport = require('passport');
 
 const config = require('../config');
 const Auth = require('../controllers/auth.controller');
-const User = require('../controllers/user.controller');
-const UserModel = require('../models/user.model');
-const BalanceModel = require('../models/balance.model');
 
 module.exports = ((config, auth, passport) => {
   const route = express.Router();

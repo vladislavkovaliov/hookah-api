@@ -6,7 +6,13 @@ module.exports = ((config, transaction) => {
   const route = express.Router();
 
   route.get('/', async (req, res, next) => {
-    const response = await transaction.getAllTransaction();
+    const { page = 1, limit = 5 } = req.query;
+    const pageSize = limit;
+
+    const response = await transaction.getAllTransaction([
+      { $skip: pageSize * (page - 1), },
+      { $limit: parseInt(limit, 10), }
+    ]);
 
     if (response instanceof Error) {
       next(response);
@@ -15,6 +21,9 @@ module.exports = ((config, transaction) => {
 
     res.json({
       data: response,
+      limit,
+      page,
+      totalPages: Math.ceil(await transaction.getCount() / limit),
     });
   });
 
