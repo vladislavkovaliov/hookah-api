@@ -7,11 +7,12 @@ const mongoose = require('mongoose');
 
 const config = require('../config');
 const Auth = require('../controllers/auth.controller');
+const User = require('../controllers/user.controller');
 const UserModel = require('../models/user.model');
 const BalanceModel = require('../models/balance.model');
 const _ = require('lodash');
 
-module.exports = ((config, auth, passport, UserModel, BalanceModel) => {
+module.exports = ((config, auth, passport, UserModel, BalanceModel, user) => {
   const route = express.Router();
 
   passport.use(
@@ -139,10 +140,14 @@ module.exports = ((config, auth, passport, UserModel, BalanceModel) => {
   route.get(
     '/google/redirect',
     passport.authenticate('google'),
-    (req, res) => {
-      res.redirect(`/api/users/${req.user._id}`);
+    async (req, res) => {
+      const user = await User.getUserById({
+        id: req.user._id,
+      });
+
+      res.json(user);
     },
   );
 
   return route;
-})(config, Auth, passport, UserModel, BalanceModel);
+})(config, Auth, passport, UserModel, BalanceModel, User);
