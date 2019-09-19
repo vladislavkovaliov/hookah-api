@@ -31,7 +31,7 @@ module.exports = ((config, TransactionModel, BalanceModel) => {
         const balance = await BalanceModel.findOne(
           filter,
         );
-        balance.amount += transaction.amount;
+        balance.amount += parseInt(transaction.amount, 10);
         await BalanceModel.updateOne(
           filter,
           balance,
