@@ -5,6 +5,52 @@ const BalanceModel = require('../models/balance.model');
 const { NotFound } = require('../errors');
 
 module.exports = ((config, TransactionModel, BalanceModel) => {
+  const removeTransactionAndUpdateBalance = async (transaction) => {
+    const objectId = mongoose.Types.ObjectId(transaction._id);
+    const result = await TransactionModel.findOneAndRemove({
+      _id: objectId
+    });
+
+    if (!result) {
+      throw new NotFound();
+    }
+
+    const filter = {
+      userId: mongoose.Types.ObjectId(result.userId),
+    };
+    const balance = await BalanceModel.findOne(filter);
+
+    balance.amount += result.amount >= 0 ? -result.amount : result.amount;
+
+    const newBalance = await BalanceModel.updateOne(
+      filter,
+      balance,
+      { new: true }
+    );
+
+    return [result, newBalance]
+  };
+
+  const createTransactionAndUpdateBalance = async (transaction) => {
+    const result = await TransactionModel.create(transaction);
+    const filter = {
+      userId: mongoose.Types.ObjectId(transaction.userId),
+    };
+    const balance = await BalanceModel.findOne(
+      filter,
+    );
+
+    balance.amount += parseInt(transaction.amount, 10);
+
+    const newBalance = await BalanceModel.updateOne(
+      filter,
+      balance,
+      { new: true }
+    );
+
+    return [result, newBalance];
+  };
+
   return {
     getAllTransaction: async (filter) => {
       try {
@@ -24,19 +70,7 @@ module.exports = ((config, TransactionModel, BalanceModel) => {
 
     createTransaction: async (transaction) => {
       try {
-        const result = await TransactionModel.create(transaction);
-        const filter = {
-          userId: mongoose.Types.ObjectId(transaction.userId),
-        };
-        const balance = await BalanceModel.findOne(
-          filter,
-        );
-        balance.amount += parseInt(transaction.amount, 10);
-        await BalanceModel.updateOne(
-          filter,
-          balance,
-          { new: true }
-        );
+        const [result] = await createTransactionAndUpdateBalance(transaction);
 
         return result._doc;
       } catch (e) {
@@ -66,17 +100,23 @@ module.exports = ((config, TransactionModel, BalanceModel) => {
 
     updateTransaction: async (transaction) => {
       try {
-        const { _id } = transaction;
-        const objectId = mongoose.Types.ObjectId(_id);
-        const result = await TransactionModel.findOneAndUpdate(
-          { _id: objectId, },
-          transaction,
-          { new: true },
-        );
+        // TODO: clarify with Vlad
+        // const { _id } = transaction;
+        // const objectId = mongoose.Types.ObjectId(_id);
+        // const result = await TransactionModel.findOneAndUpdate(
+        //   { _id: objectId, },
+        //   transaction,
+        //   { new: true },
+        // );
+        // if (!result) {
+        //   throw new NotFound();
+        // }
 
-        if (!result) {
-          throw new NotFound();
-        }
+        const [removedTransaction] = await removeTransactionAndUpdateBalance(transaction);
+        const [result] = await createTransactionAndUpdateBalance({
+          ...transaction,
+          userId: removedTransaction.userId,
+        });
 
         return result._doc;
       } catch (e) {
@@ -87,15 +127,7 @@ module.exports = ((config, TransactionModel, BalanceModel) => {
 
     removeTransaction: async (transaction) => {
       try {
-        const objectId = mongoose.Types.ObjectId(transaction._id);
-        const result = await TransactionModel.findOneAndRemove({
-          _id: objectId
-        });
-
-        if (!result) {
-          throw new NotFound();
-        }
-
+        const [result] = await removeTransactionAndUpdateBalance(transaction);
         return result._doc;
       } catch (e) {
         console.trace(e);
