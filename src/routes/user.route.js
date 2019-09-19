@@ -68,10 +68,18 @@ module.exports = ((config, user, profile) => {
 
   route.get('/:id/transactions', async (req, res, next) => {
     const { id } = req.params;
+    const { page = 1, limit = 5 } = req.query;
+    const pageSize = limit;
+
     const response = await user.getUserByIdWithTransactions(
-      {
-        id,
-      },
+      { id },
+      [
+        {
+          $sort: { 'date': -1 },
+        },
+        { $skip: pageSize * (page - 1), },
+        { $limit: parseInt(limit, 10), }
+      ]
     );
 
     if (response instanceof Error) {

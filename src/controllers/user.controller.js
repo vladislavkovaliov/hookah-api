@@ -106,7 +106,7 @@ module.exports = ((config, UserModel) => {
       }
     },
 
-    getUserByIdWithTransactions: async (user) => {
+    getUserByIdWithTransactions: async (user, pipeline) => {
       try {
         const _id = mongoose.Types.ObjectId(user.id);
         const result = await UserModel.aggregate([
@@ -131,8 +131,12 @@ module.exports = ((config, UserModel) => {
           {
             $lookup: {
               from: 'transactions',
-              localField: '_id',
-              foreignField: 'userId',
+              pipeline: [
+                {
+                  $match: { userId: _id },
+                },
+                ...pipeline,
+              ],
               as: 'transactions',
             },
           },
