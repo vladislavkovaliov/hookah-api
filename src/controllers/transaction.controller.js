@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const config = require('../config');
 const TransactionModel = require('../models/transaction.model');
+const BalanceModel = require('../models/balance.model');
 const { NotFound } = require('../errors');
 
-module.exports = ((config, TransactionModel) => {
+module.exports = ((config, TransactionModel, BalanceModel) => {
   return {
     getAllTransaction: async (filter) => {
       try {
@@ -24,6 +25,18 @@ module.exports = ((config, TransactionModel) => {
     createTransaction: async (transaction) => {
       try {
         const result = await TransactionModel.create(transaction);
+        const filter = {
+          userId: mongoose.Types.ObjectId(transaction.userId),
+        };
+        const balance = await BalanceModel.findOne(
+          filter,
+        );
+        balance.amount += transaction.amount;
+        await BalanceModel.updateOne(
+          filter,
+          balance,
+          { new: true }
+        );
 
         return result._doc;
       } catch (e) {
@@ -94,4 +107,4 @@ module.exports = ((config, TransactionModel) => {
       return await TransactionModel.count();
     },
   };
-})(config, TransactionModel);
+})(config, TransactionModel, BalanceModel);

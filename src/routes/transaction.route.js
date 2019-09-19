@@ -44,7 +44,7 @@ module.exports = ((config, transaction) => {
   });
 
   route.post('/', async (req, res, next) => {
-    const { amount, userId, date, } = req.body;
+    const { amount, userId, date } = req.body;
     const response = await transaction.createTransaction({
       amount,
       userId,

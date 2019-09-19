@@ -13,6 +13,19 @@ module.exports = ((config, UserModel) => {
               $sort: { 'createAt': -1 },
             },
             ...filter,
+            {
+              $lookup: {
+                from: 'balances',
+                localField: '_id',
+                foreignField: 'userId',
+                as: 'balance',
+              },
+            },
+            {
+              $unwind: {
+                path: '$balance',
+              },
+            }
           ]);
 
         return users
