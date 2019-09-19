@@ -40,6 +40,18 @@ paths:
         - "application/json"
       produces:
         - "application/json"
+      parameters:
+        - name: hookah-jwt
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+        - in: "query"
+          name: "page"
+          type: "number"
+        - in: "query"
+          name: "limit"
+          type: "number"
       responses:
         200:
           schema:

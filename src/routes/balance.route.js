@@ -7,10 +7,18 @@ module.exports = ((config, balance) => {
   const route = express.Router();
 
   route.get('/', async (req, res) => {
-    const response = await balance.getAllBalances();
+    const { page = 1, limit = 5 } = req.query;
+    const pageSize = limit;
+    const response = await balance.getAllBalances([
+      { $skip: pageSize * (page - 1), },
+      { $limit: parseInt(limit, 10), }
+    ]);
 
     res.json({
       data: response,
+      limit,
+      page,
+      totalPages: Math.ceil(await balance.getCount() / limit),
     });
   });
 

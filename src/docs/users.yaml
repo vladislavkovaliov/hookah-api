@@ -42,6 +42,12 @@ paths:
           description: an authorization header
           required: true
           type: string
+        - in: "query"
+          name: "page"
+          type: "number"
+        - in: "query"
+          name: "limit"
+          type: "number"
       responses:
         200:
           description: "successful operation"
@@ -191,6 +197,12 @@ paths:
           description: "The user id that needs to be found"
           required: true
           type: "string"
+        - in: "query"
+          name: "page"
+          type: "number"
+        - in: "query"
+          name: "limit"
+          type: "number"
       responses:
         200:
           schema:

@@ -20,10 +20,18 @@ module.exports = ((config, user, profile) => {
   });
 
   route.get('/', async (req, res) => {
-    const response = await user.getAllUsers();
+    const { page = 1, limit = 5 } = req.query;
+    const pageSize = limit;
+    const response = await user.getAllUsers([
+      { $skip: pageSize * (page - 1), },
+      { $limit: parseInt(limit, 10), }
+    ]);
 
     res.json({
       data: response,
+      limit,
+      page,
+      totalPages: Math.ceil(await user.getCount() / limit),
     });
   });
 

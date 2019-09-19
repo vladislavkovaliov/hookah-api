@@ -5,19 +5,17 @@ const { NotFound } = require('../errors');
 
 module.exports = ((config, UserModel) => {
   return {
-    getAllUsers: async () => {
+    getAllUsers: async (filter) => {
       try {
         const users = await UserModel
-          .find();
+          .aggregate([
+            {
+              $sort: { 'createAt': -1 },
+            },
+            ...filter,
+          ]);
 
-        return users.map(u => ({
-          _id: u._id,
-          email: u.email,
-          name: u.name,
-          balance: u.balance,
-          imageUrl: u.imageUrl,
-          transactions: u.transactions,
-        }));
+        return users
       } catch (e) {
         console.trace(e);
       }
@@ -150,5 +148,9 @@ module.exports = ((config, UserModel) => {
         return e;
       }
     },
+
+    getCount: async () => {
+      return await UserModel.count();
+    }
   };
 })(config, UserModel);

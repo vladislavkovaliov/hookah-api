@@ -5,8 +5,13 @@ const { NotFound } = require('../errors');
 
 module.exports = ((config, BalanceModel) => {
   return {
-    getAllBalances: async () => {
-      const balances = await BalanceModel.find();
+    getAllBalances: async (filter) => {
+      const balances = await BalanceModel.aggregate([
+        {
+          $sort: { 'createAt': -1 },
+        },
+        ...filter,
+      ]);
 
       return balances;
     },
@@ -129,6 +134,10 @@ module.exports = ((config, BalanceModel) => {
 
       return balance._doc;
     },
+
+    getCount: async () => {
+      return await BalanceModel.count();
+    }
   };
 })(config, BalanceModel);
 
