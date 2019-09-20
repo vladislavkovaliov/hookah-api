@@ -45,9 +45,7 @@ module.exports = ((config, user, profile) => {
       return;
     }
 
-    res.status(201).json({
-      ...response,
-    });
+    res.status(201).json(response);
   });
 
   route.get('/:id', async (req, res, next) => {

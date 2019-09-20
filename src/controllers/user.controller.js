@@ -1,9 +1,10 @@
 const UserModel = require('../models/user.model');
+const BalanceModel = require('../models/balance.model');
 const config = require('../config');
 const mongoose = require('mongoose');
 const { NotFound } = require('../errors');
 
-module.exports = ((config, UserModel) => {
+module.exports = ((config, UserModel, BalanceModel) => {
   return {
     getAllUsers: async (filter) => {
       try {
@@ -36,9 +37,39 @@ module.exports = ((config, UserModel) => {
 
     createUser: async (user) => {
       try {
-        const result = await UserModel.create(user);
+        const newUser = await UserModel.create(user);
+        await BalanceModel.create({
+          userId: mongoose.Types.ObjectId(newUser._id),
+          amount: 0,
+          message: '',
+        });
 
-        return result._doc;
+        const result = await UserModel.aggregate([
+          {
+            $match: {
+              _id: newUser._id,
+            },
+          },
+          {
+            $lookup: {
+              from: 'balances',
+              localField: '_id',
+              foreignField: 'userId',
+              as: 'balance',
+            },
+          },
+          {
+            $unwind: {
+              path: '$balance',
+            },
+          },
+        ]);
+
+        if (!result) {
+          throw new NotFound();
+        }
+
+        return result[0];
       } catch (e) {
         console.trace(e);
         return e;
@@ -170,4 +201,4 @@ module.exports = ((config, UserModel) => {
       return await UserModel.count();
     }
   };
-})(config, UserModel);
+})(config, UserModel, BalanceModel);
